@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="protect.js"></script>
+  <link rel="icon" type="image/png" href="icon.ico">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Books &amp; Video Lessons | Smartech Typing Tutor</title>
+  <script src="themes.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="shell.css">
+  <link rel="stylesheet" href="premium.css">
+  <script src="content-sync.js"></script>
+  <script src="profile.js"></script>
+  <script src="pagehead.js"></script>
+  <style>
+    body { font-family: var(--font-body); margin: 0; background: var(--bg); color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="main">
+
+  <div class="rs-wrap">
+    <div class="rs-bar">
+      <div class="rs-tabs" role="tablist" aria-label="Library">
+        <button type="button" class="rs-tab" role="tab" id="tabBooks" data-tab="books" aria-selected="true">Books &amp; Study Material <b id="cntBooks">0</b></button>
+        <button type="button" class="rs-tab" role="tab" id="tabVideos" data-tab="videos" aria-selected="false">Video Lessons <b id="cntVideos">0</b></button>
+      </div>
+      <div id="rsSync"></div>
+    </div>
+
+    <div class="rs-grid" id="rsGrid" role="tabpanel"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var C = window.SmartechContent;
+  var grid = document.getElementById("rsGrid");
+  var tab = /^videos?$/i.test(new URLSearchParams(location.search).get("tab") || "") ? "videos" : "books";
+  var loading = true;
+
+  var ICON = {
+    book: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5c4.2-2 9-1.6 13 1.2V27c-4-2.8-8.8-3.2-13-1.2Z" fill="currentColor" fill-opacity=".13"/><path d="M29 7.5c-4.2-2-9-1.6-13 1.2V27c4-2.8 8.8-3.2 13-1.2Z" fill="currentColor" fill-opacity=".13"/><path d="M16 8.7V27"/></svg>',
+    video: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="26" height="20" rx="5.5" fill="currentColor" fill-opacity=".13"/><path d="M13.2 11.4 21 16l-7.8 4.6Z" fill="currentColor"/></svg>'
+  };
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  function render() {
+    var all = C ? C.materials() : [];
+    var books = all.filter(function (m) { return m.type === "book"; });
+    var videos = all.filter(function (m) { return m.type === "video"; });
+    document.getElementById("cntBooks").textContent = books.length;
+    document.getElementById("cntVideos").textContent = videos.length;
+    ["books", "videos"].forEach(function (k) {
+      document.getElementById(k === "books" ? "tabBooks" : "tabVideos").setAttribute("aria-selected", String(k === tab));
+    });
+
+    var list = tab === "videos" ? videos : books;
+    if (!list.length) {
+      var offline = navigator.onLine === false;
+      grid.innerHTML = '<div class="rs-empty" style="grid-column:1/-1">' + (tab === "videos" ? ICON.video : ICON.book) +
+        "<h3>" + (loading ? "Loading…" : offline && !all.length ? "You are offline" : "Nothing here yet") + "</h3>" +
+        "<p>" + (loading ? "Checking for the latest items." : offline && !all.length
+          ? "Connect to the internet once so the library can download. After that it is available offline."
+          : "Your institute adds " + (tab === "videos" ? "recorded classes" : "books and study material") + " here. Check back soon, or press Update.") + "</p></div>";
+      return;
+    }
+    grid.innerHTML = list.map(function (m) {
+      var v = m.type === "video";
+      return '<article class="rs-card' + (v ? " video" : "") + '">' +
+        (m.tag ? '<span class="rs-tag">' + esc(m.tag) + "</span>" : "") +
+        '<span class="rs-ico">' + (v ? ICON.video : ICON.book) + "</span>" +
+        "<h3>" + esc(m.title) + "</h3>" +
+        (m.desc ? '<p class="rs-desc">' + esc(m.desc) + "</p>" : "") +
+        '<div class="rs-foot"><span class="rs-lang">' + esc(m.lang) + "</span>" +
+        '<a class="rs-open" href="' + esc(m.url) + '" target="_blank" rel="noopener noreferrer">' + (v ? "Watch" : "Open") + " &rarr;</a></div></article>";
+    }).join("");
+  }
+
+  document.querySelectorAll(".rs-tab").forEach(function (b) {
+    b.addEventListener("click", function () { tab = b.getAttribute("data-tab"); render(); });
+  });
+
+  render();
+  if (C) {
+    C.mountStatus("rsSync", { kinds: ["materials"], label: "Library" });
+    C.bindMaterials({ onUpdate: render }).then(function () { loading = false; render(); });
+  } else { loading = false; render(); }
+})();
+</script>
+</body>
+</html>

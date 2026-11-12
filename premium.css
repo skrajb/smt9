@@ -1,0 +1,110 @@
+/* ============================================================
+   Smartech Typing Tutor — premium.css
+   Shared polish used by the course pages, the Speed Test and the
+   Study Material page. Everything reads the theme tokens (--ink,
+   --gold, --accent, --card ...) so all themes keep working.
+   Written without newer CSS (color-mix, :has ...) so it also runs on
+   the Windows 7 build.
+   ============================================================ */
+
+/* ---------- "Update from GitHub" pill (content-sync.js) ---------- */
+.sc-pill {
+  display: inline-flex; align-items: center; gap: 10px; max-width: 100%;
+  padding: 5px 5px 5px 14px; border-radius: 999px;
+  background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+  font-size: 12.5px; color: var(--muted);
+}
+.sc-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #9aa6b6; }
+.sc-pill.ok .sc-dot { background: #22a06b; box-shadow: 0 0 0 3px rgba(34,160,107,.18); }
+.sc-pill.off .sc-dot { background: #d19a2a; box-shadow: 0 0 0 3px rgba(209,154,42,.18); }
+.sc-pill.busy .sc-dot { background: var(--gold); animation: scPulse 1s ease-in-out infinite; }
+.sc-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sc-btn {
+  flex: none; display: inline-flex; align-items: center; gap: 6px; border: 0; cursor: pointer;
+  font: inherit; font-size: 12px; font-weight: 700; color: #fff; background: var(--ink);
+  padding: 6px 13px; border-radius: 999px; transition: transform .15s ease, background .15s ease;
+}
+.sc-btn svg { width: 13px; height: 13px; }
+.sc-btn:hover { background: var(--accent); transform: translateY(-1px); }
+.sc-btn[disabled] { opacity: .65; cursor: progress; transform: none; }
+.sc-pill.busy .sc-btn svg { animation: scSpin .9s linear infinite; }
+@keyframes scPulse { 50% { opacity: .3; } }
+@keyframes scSpin { to { transform: rotate(360deg); } }
+#lessonSync { margin: 0 0 18px; }
+.st-syncrow { display: flex; justify-content: flex-end; margin: 12px 0 0; }
+
+/* ---------- course pages: "Choose a Lesson" ---------- */
+#lessonsSection > div:first-child { align-items: flex-end !important; gap: 8px 18px; flex-wrap: wrap; }
+#lessonsSection h2 {
+  font-family: var(--font-body); font-weight: 800; font-size: 1.7rem; letter-spacing: -0.02em; color: var(--ink);
+}
+#lessonGrid { grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 18px; }
+.lessonBtn {
+  position: relative; display: flex; flex-direction: column; gap: 10px; min-height: 170px;
+  padding: 18px 18px 16px; text-align: left; overflow: hidden; cursor: pointer;
+  border-radius: 20px; border: 1.5px solid var(--border);
+  background: linear-gradient(165deg, var(--card) 55%, var(--gold-soft));
+  box-shadow: var(--shadow-sm);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.lessonBtn::after {
+  content: ""; position: absolute; right: -36px; top: -36px; width: 116px; height: 116px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--gold-light), transparent 70%); opacity: .35;
+  transition: opacity .2s ease, transform .3s ease; pointer-events: none;
+}
+.lessonBtn:hover, .lessonBtn:focus-visible { transform: translateY(-5px); border-color: var(--gold); box-shadow: var(--shadow-md); }
+.lessonBtn:hover::after { opacity: .6; transform: scale(1.15); }
+.lb-num {
+  position: relative; z-index: 1; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center;
+  font-weight: 800; font-size: 15px; color: #fff;
+  background: linear-gradient(135deg, var(--ink), var(--ink-600)); box-shadow: 0 6px 14px rgba(11,30,54,.22);
+}
+.lessonBtn h3 { position: relative; z-index: 1; margin: 0; font-family: var(--font-body); font-weight: 800; font-size: 16px; line-height: 1.3; color: var(--ink); }
+.lessonBtn .lb-words { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 5px; margin: 0; }
+.lb-words span {
+  font-size: 12px; line-height: 1.5; padding: 1px 9px; border-radius: 999px;
+  background: rgba(255,255,255,.75); color: var(--muted); border: 1px solid var(--border);
+}
+.lb-go { position: relative; z-index: 1; margin-top: auto; font-size: 12.5px; font-weight: 800; color: var(--accent); }
+.lb-go i { display: inline-block; font-style: normal; transition: transform .18s ease; }
+.lessonBtn:hover .lb-go i { transform: translateX(4px); }
+
+/* ---------- Study Material page (resources.html) ---------- */
+.rs-wrap { width: 94%; max-width: 1180px; margin: 0 auto; padding: 8px 0 40px; }
+.rs-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin: 6px 0 22px; }
+.rs-tabs { display: inline-flex; padding: 5px; gap: 4px; border-radius: 999px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.rs-tab {
+  display: inline-flex; align-items: center; gap: 8px; border: 0; cursor: pointer; font: inherit; font-weight: 700; font-size: 14px;
+  padding: 9px 20px; border-radius: 999px; background: transparent; color: var(--muted); transition: background .15s ease, color .15s ease;
+}
+.rs-tab b { font-size: 11.5px; min-width: 22px; padding: 1px 7px; border-radius: 999px; background: var(--bg); color: var(--muted); text-align: center; }
+.rs-tab:hover { color: var(--ink); }
+.rs-tab[aria-selected="true"] { background: var(--ink); color: #fff; box-shadow: 0 6px 14px rgba(11,30,54,.2); }
+.rs-tab[aria-selected="true"] b { background: rgba(255,255,255,.18); color: #fff; }
+.rs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px; }
+.rs-card {
+  --c: #22A06B; --c-soft: #E6F7EE; --c-deep: #14704A;
+  position: relative; display: flex; flex-direction: column; gap: 10px; padding: 20px; overflow: hidden;
+  border-radius: 22px; background: linear-gradient(180deg, var(--c-soft), var(--card) 46%);
+  border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.rs-card.video { --c: #E5527A; --c-soft: #FFEAF0; --c-deep: #B3254B; }
+.rs-card:hover { transform: translateY(-5px); border-color: var(--c); box-shadow: var(--shadow-md); }
+.rs-ico { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; color: var(--c-deep); background: #fff; box-shadow: 0 8px 18px rgba(15,23,42,.1); }
+.rs-ico svg { width: 28px; height: 28px; }
+.rs-tag { position: absolute; top: 18px; right: 18px; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--c); color: #fff; }
+.rs-card h3 { margin: 4px 0 0; font-family: var(--font-body); font-size: 17px; font-weight: 800; line-height: 1.3; color: var(--ink); }
+.rs-desc { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.rs-foot { margin-top: auto; padding-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.rs-lang { font-size: 12px; font-weight: 700; color: var(--c-deep); }
+.rs-open { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-size: 13px; font-weight: 800; padding: 8px 16px; border-radius: 999px; background: var(--c); color: #fff; transition: transform .15s ease, filter .15s ease; }
+.rs-open:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.rs-empty { text-align: center; padding: 54px 20px; border: 2px dashed var(--border); border-radius: 24px; background: var(--card); color: var(--muted); }
+.rs-empty svg { width: 54px; height: 54px; color: var(--gold); margin-bottom: 10px; }
+.rs-empty h3 { margin: 0 0 6px; font-family: var(--font-body); font-size: 1.15rem; color: var(--ink); }
+.rs-empty p { margin: 0 auto; max-width: 460px; font-size: 14px; line-height: 1.6; }
+
+@media (max-width: 640px) {
+  #lessonGrid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .rs-tab { padding: 8px 14px; font-size: 13px; }
+}
